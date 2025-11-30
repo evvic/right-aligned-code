@@ -16,8 +16,7 @@
     "Other"
   ],
   "activationEvents": [
-    "onCommand:right-aligned-code.indent",
-    "onCommand:right-aligned-code.outdent"
+    "onStartupFinished"
   ],
   "main": "./dist/extension.js",
   "contributes": {
