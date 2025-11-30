@@ -1,0 +1,77 @@
+{
+  "name": "right-aligned-code",
+  "displayName": "Right-Aligned Code",
+  "description": "A custom formatting extension that formats all code to be aligned to the right.",
+  "version": "0.0.1",
+  "publisher": "ewic",
+  "icon": "assets/icon.png",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/evvic/right-aligned-code"
+  },
+  "engines": {
+    "vscode": "^1.102.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onCommand:right-aligned-code.indent",
+    "onCommand:right-aligned-code.outdent"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "right-aligned-code.indent",
+        "title": "Fibonacci: Indent Line(s)"
+      },
+      {
+        "command": "right-aligned-code.outdent",
+        "title": "Fibonacci: Outdent Line(s)"
+      }
+  ],
+  "keybindings": [
+      {
+        "command": "-tab",
+        "key": "tab",
+        "when": "editorTextFocus && !editorReadonly && !inSnippetMode && !suggestWidgetVisible"
+      },
+      {
+        "command": "right-aligned-code.indent",
+        "key": "tab",
+        "when": "editorTextFocus && !editorReadonly && !inSnippetMode && !suggestWidgetVisible"
+      },
+      {
+        "command": "right-aligned-code.outdent",
+        "key": "shift+tab",
+        "when": "editorTextFocus && !editorReadonly && !inSnippetMode && !suggestWidgetVisible"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run package",
+    "compile": "webpack",
+    "watch": "webpack --watch",
+    "package": "webpack --mode production --devtool hidden-source-map",
+    "compile-tests": "tsc -p . --outDir out",
+    "watch-tests": "tsc -p . -w --outDir out",
+    "pretest": "npm run compile-tests && npm run compile && npm run lint",
+    "lint": "eslint src",
+    "test": "vscode-test"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.102.0",
+    "@types/mocha": "^10.0.10",
+    "@types/node": "20.x",
+    "@typescript-eslint/eslint-plugin": "^8.31.1",
+    "@typescript-eslint/parser": "^8.31.1",
+    "eslint": "^9.25.1",
+    "typescript": "^5.8.3",
+    "ts-loader": "^9.5.2",
+    "webpack": "^5.99.7",
+    "webpack-cli": "^6.0.1",
+    "@vscode/test-cli": "^0.0.11",
+    "@vscode/test-electron": "^2.5.2"
+  }
+}
