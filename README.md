@@ -1,7 +1,7 @@
 
 ## Right-Aligned Code
 
-![Right-Aligned Code Demo](assets/fib-tabbing-demo.gif)
+![Right-Aligned Code Demo](assets/right-aligned-demo.gif)
 
 Right-Aligned Code is a small Visual Studio Code extension that automatically pads or trims the left side of lines so that the visible content (ignoring leading whitespace) of every line ends at the same column as the longest content line in the document. In short: it keeps code right-aligned by adding or removing leading spaces as you edit.
 

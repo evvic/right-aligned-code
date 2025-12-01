@@ -2,7 +2,7 @@
   "name": "right-aligned-code",
   "displayName": "Right-Aligned Code",
   "description": "A custom formatting extension that formats all code to be aligned to the right.",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "publisher": "ewic",
   "icon": "assets/icon.png",
   "repository": {
