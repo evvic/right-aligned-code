@@ -1,11 +1,11 @@
 
-## Right-Aligned Code
+## Right-Align Code
 
 ![Right-Aligned Code Demo](assets/right-aligned-demo.gif)
 
-Right-Aligned Code is a small Visual Studio Code extension that automatically pads or trims the left side of lines so that the visible content (ignoring leading whitespace) of every line ends at the same column as the longest content line in the document. In short: it keeps code right-aligned by adding or removing leading spaces as you edit.
+Keep your code aligned to the right!
 
-This README replaces the original Fibonacci-tabbing documentation and documents how the current extension works, how to build and test it locally, and notes about behavior and limitations.
+Right-Aligned Code is a Visual Studio Code extension that automatically pads or trims the left side of lines so that the visible content (ignoring leading whitespace) of every line ends at the same column as the longest content line in the document. In short: it keeps code right-aligned by adding or removing leading spaces as you edit.
 
 ## Features
 
@@ -21,7 +21,32 @@ This README replaces the original Fibonacci-tabbing documentation and documents 
 3. When the extension modifies leading whitespace it adjusts the editor selections so carets stay positioned relative to the content.
 4. The extension uses a small debounce and safeguards to avoid interfering with in-flight typing; if you type extremely fast there are protections to minimize races and avoid character reordering.
 
-## Quick start — develop & test
+
+## Known limitations & notes
+
+- Tabs vs spaces: the extension measures leading whitespace as code units (characters). If your file uses tabs, alignment is done by character count, not visual columns. Visual alignment with mixed tabs/spaces may look off.
+- Extreme rapid typing: we put protections in place (cursor-preservation and small debounces), but in extremely high-frequency typing there is still a small chance of race conditions. A configurable small grace window eliminates these reliably at the cost of a tiny delay.
+- Structure-ignorant: alignment is purely based on leading whitespace and content length — it does not attempt to parse language syntax or align by semantic columns.
+
+## Troubleshooting
+
+- If automatic edits feel intrusive, try disabling the extension in the Extension Development Host and re-enable it after making changes, or request a configuration option to align only on save or only for visible lines.
+- If undo behaves unexpectedly, ensure you are running a recent build — the extension merges its edits into the undo stack so a single Ctrl+Z should undo both your typing and the auto-alignment.
+
+## Contribution
+
+Contributions, bug reports and feature requests are welcome. Open an issue or a pull request on the repository describing a reproducible scenario.
+
+### Configuration
+
+At the moment the extension exposes no user settings. If you'd like different timing or behavior (e.g., a small grace window before aligning an actively edited line), we can add scoped configuration options such as:
+
+- `rightAlignedCode.graceMillis` — milliseconds to wait before editing a line that was just changed (helps eliminate rare typing races)
+- `rightAlignedCode.debounceMillis` — debounce interval for alignment runs
+
+If you want these added I can wire them up to the extension settings and apply them to the live alignment logic.
+
+### Quick start — develop & test
 
 1. Install dependencies:
 
@@ -42,30 +67,6 @@ npm run compile
 ```bash
 npm test
 ```
-
-## Configuration
-
-At the moment the extension exposes no user settings. If you'd like different timing or behavior (e.g., a small grace window before aligning an actively edited line), we can add scoped configuration options such as:
-
-- `rightAlignedCode.graceMillis` — milliseconds to wait before editing a line that was just changed (helps eliminate rare typing races)
-- `rightAlignedCode.debounceMillis` — debounce interval for alignment runs
-
-If you want these added I can wire them up to the extension settings and apply them to the live alignment logic.
-
-## Known limitations & notes
-
-- Tabs vs spaces: the extension measures leading whitespace as code units (characters). If your file uses tabs, alignment is done by character count, not visual columns. Visual alignment with mixed tabs/spaces may look off.
-- Extreme rapid typing: we put protections in place (cursor-preservation and small debounces), but in extremely high-frequency typing there is still a small chance of race conditions. A configurable small grace window eliminates these reliably at the cost of a tiny delay.
-- Structure-ignorant: alignment is purely based on leading whitespace and content length — it does not attempt to parse language syntax or align by semantic columns.
-
-## Troubleshooting
-
-- If automatic edits feel intrusive, try disabling the extension in the Extension Development Host and re-enable it after making changes, or request a configuration option to align only on save or only for visible lines.
-- If undo behaves unexpectedly, ensure you are running a recent build — the extension merges its edits into the undo stack so a single Ctrl+Z should undo both your typing and the auto-alignment.
-
-## Contribution
-
-Contributions, bug reports and feature requests are welcome. Open an issue or a pull request on the repository describing a reproducible scenario.
 
 ## License
 
