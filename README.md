@@ -1,69 +1,75 @@
 
-# Right-Aligned Code
+## Right-Aligned Code
 
 ![Right-Aligned Code Demo](assets/fib-tabbing-demo.gif)
 
-**Right-Aligned Code** is a simple Visual Studio Code extension that overrides the default tab and shift+tab behavior to use indentation widths based on the Fibonacci sequence (with a multiplier of 2). Instead of a fixed number of spaces per tab, each new indentation level uses the next Fibonacci number (times 2) for the number of spaces.
+Right-Aligned Code is a small Visual Studio Code extension that automatically pads or trims the left side of lines so that the visible content (ignoring leading whitespace) of every line ends at the same column as the longest content line in the document. In short: it keeps code right-aligned by adding or removing leading spaces as you edit.
 
-For example:
-
-- The first indent level gives 2 spaces
-- The second indent level gives 2 spaces
-- The third indent level gives 4 spaces
-- The fourth indent level gives 6 spaces
-- The fifth indent level gives 10 spaces
-- ...and so on, following the Fibonacci sequence (1, 1, 2, 3, 5, 8, ...) × 2
-
-This creates a visually interesting and non-linear indentation style.
-
+This README replaces the original Fibonacci-tabbing documentation and documents how the current extension works, how to build and test it locally, and notes about behavior and limitations.
 
 ## Features
 
-- Overrides the default tab and shift+tab keys in the editor
-- Indents and outdents lines using Fibonacci-spaced indentation (with a multiplier of 2)
-- Works with any file type
+- Live right-alignment: the extension updates padding as you edit so shorter lines end at the same content column as the longest line.
+- Content-aware: alignment is based on the length of the line content (leading whitespace is ignored when measuring line length).
+- Cursor preservation: when padding changes, the extension tries to keep your caret(s) and selection(s) at the same character in the content so typing remains natural.
+- Undo-friendly: automatic padding edits are merged with the user's edit in the undo stack so a single Ctrl+Z will revert typing plus the auto-alignment.
 
+## How it works (short)
 
-## Requirements
+1. On text changes the extension computes each line's content length (line length minus leading whitespace) and finds the maximum content length.
+2. For every line it computes a desired amount of leading spaces so content ends at the same column as the longest line. It replaces the existing leading whitespace with the desired number of spaces.
+3. When the extension modifies leading whitespace it adjusts the editor selections so carets stay positioned relative to the content.
+4. The extension uses a small debounce and safeguards to avoid interfering with in-flight typing; if you type extremely fast there are protections to minimize races and avoid character reordering.
 
-No special requirements. Just install and use!
+## Quick start — develop & test
 
+1. Install dependencies:
 
-## Extension Settings
+```bash
+npm install
+```
 
-This extension does not add any custom settings.
+2. Build the extension bundle (used by the Extension Development Host):
 
+```bash
+npm run compile
+```
 
-## Known Issues
+3. Launch the Extension Development Host from VS Code (Run → Start Debugging) to test in a new window. Edit files there and watch the right-alignment behavior.
 
-- Indentation is always spaces (not tabs)
-- Indentation is based on leading spaces, not code structure
+4. Run tests (if present):
 
+```bash
+npm test
+```
 
-## Release Notes
+## Configuration
 
-### 0.0.1
-- Initial release: Fibonacci-spaced tabbing override
+At the moment the extension exposes no user settings. If you'd like different timing or behavior (e.g., a small grace window before aligning an actively edited line), we can add scoped configuration options such as:
 
----
+- `rightAlignedCode.graceMillis` — milliseconds to wait before editing a line that was just changed (helps eliminate rare typing races)
+- `rightAlignedCode.debounceMillis` — debounce interval for alignment runs
 
-## Following extension guidelines
+If you want these added I can wire them up to the extension settings and apply them to the live alignment logic.
 
-Ensure that you've read through the extensions guidelines and follow the best practices for creating your extension.
+## Known limitations & notes
 
-* [Extension Guidelines](https://code.visualstudio.com/api/references/extension-guidelines)
+- Tabs vs spaces: the extension measures leading whitespace as code units (characters). If your file uses tabs, alignment is done by character count, not visual columns. Visual alignment with mixed tabs/spaces may look off.
+- Extreme rapid typing: we put protections in place (cursor-preservation and small debounces), but in extremely high-frequency typing there is still a small chance of race conditions. A configurable small grace window eliminates these reliably at the cost of a tiny delay.
+- Structure-ignorant: alignment is purely based on leading whitespace and content length — it does not attempt to parse language syntax or align by semantic columns.
 
-## Working with Markdown
+## Troubleshooting
 
-You can author your README using Visual Studio Code. Here are some useful editor keyboard shortcuts:
+- If automatic edits feel intrusive, try disabling the extension in the Extension Development Host and re-enable it after making changes, or request a configuration option to align only on save or only for visible lines.
+- If undo behaves unexpectedly, ensure you are running a recent build — the extension merges its edits into the undo stack so a single Ctrl+Z should undo both your typing and the auto-alignment.
 
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux).
-* Toggle preview (`Shift+Cmd+V` on macOS or `Shift+Ctrl+V` on Windows and Linux).
-* Press `Ctrl+Space` (Windows, Linux, macOS) to see a list of Markdown snippets.
+## Contribution
 
-## For more information
+Contributions, bug reports and feature requests are welcome. Open an issue or a pull request on the repository describing a reproducible scenario.
 
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
+## License
 
-**Enjoy!**
+This project is released under the MIT License. See `LICENSE.txt` for details.
+
+Enjoy — let me know if you'd like a per-line grace window or a setting to tune alignment latency.
+

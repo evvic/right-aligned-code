@@ -19,35 +19,6 @@
     "onStartupFinished"
   ],
   "main": "./dist/extension.js",
-  "contributes": {
-    "commands": [
-      {
-        "command": "right-aligned-code.indent",
-        "title": "Fibonacci: Indent Line(s)"
-      },
-      {
-        "command": "right-aligned-code.outdent",
-        "title": "Fibonacci: Outdent Line(s)"
-      }
-  ],
-  "keybindings": [
-      {
-        "command": "-tab",
-        "key": "tab",
-        "when": "editorTextFocus && !editorReadonly && !inSnippetMode && !suggestWidgetVisible"
-      },
-      {
-        "command": "right-aligned-code.indent",
-        "key": "tab",
-        "when": "editorTextFocus && !editorReadonly && !inSnippetMode && !suggestWidgetVisible"
-      },
-      {
-        "command": "right-aligned-code.outdent",
-        "key": "shift+tab",
-        "when": "editorTextFocus && !editorReadonly && !inSnippetMode && !suggestWidgetVisible"
-      }
-    ]
-  },
   "scripts": {
     "vscode:prepublish": "npm run package",
     "compile": "webpack",
